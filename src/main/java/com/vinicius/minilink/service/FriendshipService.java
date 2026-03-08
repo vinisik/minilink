@@ -52,4 +52,16 @@ public class FriendshipService {
     public List<Friendship> listAcceptedFriends(Long userId) {
         return friendshipRepository.findFriendshipsByUserIdAndStatus(userId, FriendshipStatus.ACCEPTED);
     }
+
+    public Friendship addFriend(Long requesterId, Long addresseeId) {
+        User requester = userRepository.findById(requesterId).orElseThrow();
+        User addressee = userRepository.findById(addresseeId).orElseThrow();
+
+        Friendship friendship = new Friendship();
+        friendship.setRequester(requester);
+        friendship.setAddressee(addressee);
+        friendship.setStatus(FriendshipStatus.ACCEPTED); // Para simplificar o teste
+
+        return friendshipRepository.save(friendship);
+    }
 }
