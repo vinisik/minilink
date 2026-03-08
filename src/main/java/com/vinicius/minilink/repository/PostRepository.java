@@ -8,4 +8,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // Gera o SQL automaticamente, busca os posts pelo ID do utilizador e ordena dos mais recentes para os mais antigos
     List<Post> findByUserIdOrderByCreatedAtDesc(Long userId);
+
+    // Busca posts de uma lista de IDs
+    List<Post> findByUserIdInOrderByCreatedAtDesc(List<Long> userIds);
 }

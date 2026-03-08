@@ -37,3 +37,7 @@ hs_err_pid*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+### Local DataBase ###
+data/
+*.db

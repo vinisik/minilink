@@ -27,4 +27,10 @@ public class PostController {
     public List<Post> getUserPosts(@PathVariable Long userId) {
         return service.getUserPosts(userId);
     }
+
+    // Rota do feed
+    @GetMapping("/feed/{userId}")
+    public List<Post> getFeed(@PathVariable Long userId) {
+        return service.getFeed(userId);
+    }
 }
