@@ -33,4 +33,10 @@ public class PostController {
     public List<Post> getFeed(@PathVariable Long userId) {
         return service.getFeed(userId);
     }
+
+    // Curtir ou ou descurtir um post
+    @PostMapping("/{postId}/like")
+    public String toggleLike(@PathVariable Long postId, @RequestParam Long userId) {
+        return service.toggleLike(userId, postId);
+    }
 }
