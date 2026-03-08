@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MiniLink - Cadastro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-600 flex items-center justify-center min-h-screen p-4">
+<div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <h1 class="text-3xl font-bold text-blue-600 text-center mb-2">Criar Conta</h1>
+    <p class="text-center text-gray-500 mb-8">Junte-se à comunidade MiniLink</p>
+
+    <form action="/cadastro" method="POST" class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Nome Completo</label>
+            <input type="text" name="name" required
+                   class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Username (@)</label>
+            <input type="text" name="username" required
+                   class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Bio (Breve descrição)</label>
+            <textarea name="bio" rows="2"
+                      class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Senha</label>
+            <input type="password" name="password" required
+                   class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg mt-4">
+            Finalizar Cadastro
+        </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-gray-500">
+        Já tem uma conta? <a href="/login" class="text-blue-600 font-bold hover:underline">Faça login</a>
+    </p>
+</div>
+</body>
+</html>

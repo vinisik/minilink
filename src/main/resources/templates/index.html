@@ -66,55 +66,40 @@
     </div>
 </main>
 
-<script>
-    // Criar Post
+<script th:inline="javascript">
+    const currentUserId = [[${user.id}]];
+
     async function enviarPost() {
         const content = document.getElementById('postContent').value;
         if (!content.trim()) return;
 
         try {
-            const response = await fetch('/api/posts?userId=1', {
+            const response = await fetch(`/api/posts?userId=${currentUserId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' },
                 body: content
             });
 
             if (response.ok) {
-                // Recarrega para mostrar o novo post no topo
-                window.location.reload();
-            } else {
-                alert("Ops! Algo deu errado ao publicar.");
+                document.getElementById('postContent').value = ""; // Limpa o campo
+                window.location.reload(); // Recarrega para mostrar o post
             }
         } catch (err) {
-            console.error("Erro na requisição:", err);
+            console.error("Erro ao publicar:", err);
         }
     }
 
-    // Função para Curtir
     async function curtirPost(postId, buttonElement) {
-        const userId = 1; // Usuário fixo para testes
-
         try {
-            const response = await fetch(`/api/posts/${postId}/like?userId=${userId}`, {
+            const response = await fetch(`/api/posts/${postId}/like?userId=${currentUserId}`, {
                 method: 'POST'
             });
 
             if (response.ok) {
-                const status = await response.text();
-
-                // Feedback visual simples
-                if (status.includes("sucesso")) {
-                    buttonElement.classList.add('text-red-500');
-                    buttonElement.classList.remove('text-gray-500');
-                } else {
-                    buttonElement.classList.add('text-gray-500');
-                    buttonElement.classList.remove('text-red-500');
-                }
-
-                console.log("Status do Like:", status);
+                window.location.reload(); // Recarrega para atualizar o contador/cor
             }
         } catch (error) {
-            console.error("Erro ao processar curtida:", error);
+            console.error("Erro ao curtir:", error);
         }
     }
 </script>

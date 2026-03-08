@@ -10,7 +10,6 @@ public class UserService {
 
     private final UserRepository repository;
 
-    // Injetar o repositório
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
@@ -21,5 +20,12 @@ public class UserService {
 
     public List<User> searchUsers(String username) {
         return repository.findByUsernameContainingIgnoreCase(username);
+    }
+
+    // Validação de Login
+    public User authenticate(String username, String password) {
+        return repository.findByUsername(username)
+                .filter(user -> user.getPassword().equals(password))
+                .orElseThrow(() -> new RuntimeException("Usuário ou senha inválidos"));
     }
 }
