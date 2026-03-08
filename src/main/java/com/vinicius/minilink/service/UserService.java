@@ -32,4 +32,11 @@ public class UserService {
     public User findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
+
+    public User updateUser(Long id, String newName, String newBio) {
+        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setName(newName);
+        user.setBio(newBio);
+        return repository.save(user);
+    }
 }

@@ -2,41 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MiniLink - Resultados</title>
+    <title>MiniLink - Busca</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-<nav class="bg-blue-600 p-4 text-white">
-    <div class="max-w-2xl mx-auto flex justify-between">
-        <a href="/home" class="font-bold">⬅ Voltar ao Feed</a>
-        <span>Resultados da busca</span>
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
+
+<nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center gap-4">
+        <a href="/home" class="text-slate-500 hover:text-slate-800 transition-colors font-bold text-xl mr-2">←</a>
+        <form action="/search" method="GET" class="flex-1 relative">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="text" name="query" placeholder="Buscar pessoas..."
+                   class="w-full pl-10 pr-4 py-2 bg-slate-100 rounded-full text-sm font-medium outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 border border-transparent transition-all">
+        </form>
     </div>
 </nav>
 
-<main class="max-w-xl mx-auto mt-8 px-4">
-    <h2 class="text-xl font-bold mb-6 text-gray-700">Pessoas encontradas:</h2>
+<main class="max-w-2xl mx-auto mt-6 px-4 pb-12">
+    <h2 class="text-xl font-extrabold mb-6 text-slate-900">Resultados da Busca</h2>
 
     <div class="space-y-4">
         <div th:each="result : ${results}" th:if="${result.id != user.id}"
-             class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-200">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+             class="bg-white p-5 rounded-3xl shadow-sm flex justify-between items-center border border-slate-200">
+            <div class="flex items-center gap-4">
+                <a th:href="'/profile/' + ${result.id}" class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold hover:bg-slate-200 transition-colors">
                     <span th:text="${#strings.substring(result.username, 0, 1).toUpperCase()}">U</span>
-                </div>
+                </a>
                 <div>
-                    <p class="font-bold" th:text="'@' + ${result.username}">@username</p>
-                    <p class="text-sm text-gray-500" th:text="${result.name}">Nome Completo</p>
+                    <a th:href="'/profile/' + ${result.id}" class="font-bold text-slate-900 hover:underline" th:text="${result.name}">Nome</a>
+                    <p class="text-sm text-slate-500" th:text="'@' + ${result.username}">@user</p>
                 </div>
             </div>
 
             <form th:action="'/friends/add/' + ${result.id}" method="POST">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700">
-                    + Seguir
+                <button type="submit" class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-slate-800 active:scale-95 transition-all">
+                    Seguir
                 </button>
             </form>
         </div>
 
-        <p th:if="${#lists.isEmpty(results)}" class="text-center text-gray-500">Nenhum usuário encontrado.</p>
+        <p th:if="${#lists.isEmpty(results)}" class="text-center text-slate-500 py-10 font-medium">Nenhum usuário encontrado com esse termo.</p>
     </div>
 </main>
 </body>

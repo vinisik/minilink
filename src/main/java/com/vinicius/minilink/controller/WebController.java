@@ -104,4 +104,33 @@ public class WebController {
         }
         return "redirect:/profile/" + id; // Volta para o perfil que estava visitando
     }
+
+    // Exibir página de edição de perfil
+    @GetMapping("/profile/edit")
+    public String editProfilePage(Model model, HttpSession session) {
+        User userLogado = (User) session.getAttribute("userLogado");
+        if (userLogado == null) return "redirect:/login";
+
+        // Busca o usuário atualizado no banco para preencher o formulário
+        User currentUser = userService.findById(userLogado.getId());
+        model.addAttribute("user", currentUser);
+
+        return "edit-profile"; // Criaremos este HTML a seguir
+    }
+
+    // Editar perfil
+    @PostMapping("/profile/edit")
+    public String updateProfile(@RequestParam String name, @RequestParam String bio, HttpSession session) {
+        User userLogado = (User) session.getAttribute("userLogado");
+        if (userLogado == null) return "redirect:/login";
+
+        // Atualiza no banco de dados
+        User updatedUser = userService.updateUser(userLogado.getId(), name, bio);
+
+        // Atualiza a sessão para que o novo nome apareça na navbar
+        session.setAttribute("userLogado", updatedUser);
+
+        // Redireciona de volta para a página do perfil
+        return "redirect:/profile/" + updatedUser.getId();
+    }
 }

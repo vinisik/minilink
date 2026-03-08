@@ -5,123 +5,101 @@
     <title>MiniLink - Perfil</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
 
-<nav class="bg-blue-600 p-4 text-white shadow-md sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto flex justify-between items-center gap-4">
-        <a href="/home" class="text-2xl font-extrabold tracking-tight">MiniLink</a>
-
-        <form action="/search" method="GET" class="flex-1 max-w-md flex hidden md:flex">
-            <input type="text" name="query" placeholder="Buscar usuários..."
-                   class="w-full p-2 rounded-l-lg text-black outline-none focus:ring-2 focus:ring-blue-300">
-            <button type="submit" class="bg-blue-800 px-4 rounded-r-lg hover:bg-blue-900">🔍</button>
-        </form>
-
+<nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex justify-between items-center gap-4">
+        <a href="/home" class="text-2xl font-extrabold text-blue-600 tracking-tight">MiniLink</a>
         <div class="flex items-center gap-4">
-            <a th:href="'/profile/' + ${user.id}" class="font-medium hover:underline" th:text="${user.name}">Meu Perfil</a>
-            <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-bold text-sm">Sair</a>
+            <a th:href="'/profile/' + ${user.id}" class="font-semibold text-slate-700 hover:text-blue-600 transition-colors" th:text="${user.name}">Meu Perfil</a>
+            <a href="/logout" class="text-slate-400 hover:text-red-500 font-medium text-sm transition-colors">Sair</a>
         </div>
     </div>
 </nav>
 
-<main class="max-w-2xl mx-auto mt-8 px-4 pb-12">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        <div class="h-32 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+<main class="max-w-2xl mx-auto mt-6 px-4 pb-12">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 mb-6 overflow-hidden">
+        <div class="h-32 sm:h-40 bg-gradient-to-tr from-blue-600 to-indigo-400 relative"></div>
 
-        <div class="px-6 pb-6">
-            <div class="flex justify-between items-start -mt-12">
-
-                <div class="w-24 h-24 bg-white rounded-full p-1 shadow-lg relative">
-                    <div class="w-full h-full bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-4xl font-bold">
+        <div class="px-6 pb-6 relative">
+            <div class="flex justify-between items-end -mt-12 sm:-mt-16 mb-4">
+                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-full p-1.5 relative z-10 border border-slate-100">
+                    <div class="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-blue-600 text-3xl sm:text-4xl font-bold">
                         <span th:text="${#strings.substring(profileUser.username, 0, 1).toUpperCase()}">U</span>
                     </div>
                 </div>
 
-                <div class="mt-14">
-                    <button th:if="${isOwnProfile}" class="bg-gray-200 text-gray-800 px-6 py-2 rounded-full font-bold hover:bg-gray-300 transition-colors">
+                <div class="mb-2">
+                    <a th:if="${isOwnProfile}" href="/profile/edit" class="border border-slate-300 text-slate-800 px-5 py-2 rounded-full font-bold hover:bg-slate-50 transition-colors text-sm inline-block">
                         Editar Perfil
-                    </button>
+                    </a>
 
                     <div th:unless="${isOwnProfile}">
                         <form th:if="${isFriend}" th:action="'/friends/remove/' + ${profileUser.id}" method="POST">
-                            <button type="submit" class="bg-red-100 text-red-600 px-6 py-2 rounded-full font-bold hover:bg-red-200 transition-colors">
-                                Remover Amigo
+                            <button type="submit" class="border border-red-300 text-red-600 px-5 py-2 rounded-full font-bold hover:bg-red-50 transition-colors text-sm group">
+                                <span class="group-hover:hidden">Seguindo</span>
+                                <span class="hidden group-hover:inline">Deixar de seguir</span>
                             </button>
                         </form>
                         <form th:unless="${isFriend}" th:action="'/friends/add/' + ${profileUser.id}" method="POST">
-                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition-colors">
-                                + Adicionar Amigo
+                            <button type="submit" class="bg-slate-900 text-white px-5 py-2 rounded-full font-bold hover:bg-slate-800 transition-colors text-sm">
+                                Seguir
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-3">
-                <h1 class="text-2xl font-bold text-gray-900 leading-tight" th:text="${profileUser.name}">Nome Completo</h1>
-                <p class="text-gray-500 font-medium" th:text="'@' + ${profileUser.username}">@username</p>
-                <p class="mt-4 text-gray-700 whitespace-pre-line" th:text="${profileUser.bio}">Bio do usuário...</p>
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900 leading-tight" th:text="${profileUser.name}">Nome</h1>
+                <p class="text-slate-500 font-medium" th:text="'@' + ${profileUser.username}">@username</p>
+                <p class="mt-4 text-slate-800 whitespace-pre-line text-[15px] leading-relaxed" th:text="${profileUser.bio}">Bio do usuário...</p>
             </div>
         </div>
-    </div>
 
-    <div class="flex border-b border-gray-200 mb-6">
-        <button onclick="switchTab('posts')" id="btn-posts" class="flex-1 py-4 text-center font-bold text-blue-600 border-b-2 border-blue-600">Postagens</button>
-        <button onclick="switchTab('friends')" id="btn-friends" class="flex-1 py-4 text-center font-bold text-gray-500 hover:text-blue-600 transition-colors">Amigos</button>
+        <div class="flex border-t border-slate-100">
+            <button onclick="switchTab('posts')" id="btn-posts" class="flex-1 py-4 text-center font-bold text-slate-900 border-b-4 border-blue-500 transition-colors hover:bg-slate-50">Postagens</button>
+            <button onclick="switchTab('friends')" id="btn-friends" class="flex-1 py-4 text-center font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-50 transition-colors">Seguindo</button>
+        </div>
     </div>
 
     <div id="tab-posts" class="space-y-4">
-        <div th:each="post : ${posts}" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <p class="text-gray-800 text-lg" th:text="${post.content}">Conteúdo do post</p>
-            <div class="mt-4 pt-4 border-t border-gray-50 text-sm text-gray-400">
-                Publicado recentemente
-            </div>
+        <div th:each="post : ${posts}" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+            <p class="text-slate-800 text-[15px] leading-relaxed" th:text="${post.content}">Conteúdo</p>
         </div>
-        <p th:if="${#lists.isEmpty(posts)}" class="text-center text-gray-500 py-8 bg-white rounded-xl border border-dashed border-gray-300">
-            Nenhum post publicado ainda.
-        </p>
+        <p th:if="${#lists.isEmpty(posts)}" class="text-center text-slate-500 py-10 font-medium">Nenhum post ainda.</p>
     </div>
 
     <div id="tab-friends" class="space-y-4 hidden">
-        <div th:each="friend : ${friends}" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between hover:border-blue-300 transition-colors">
-            <div class="flex items-center gap-3">
-                <a th:href="'/profile/' + ${friend.id}" class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold hover:bg-blue-200">
+        <div th:each="friend : ${friends}" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-blue-300 transition-colors">
+            <div class="flex items-center gap-4">
+                <a th:href="'/profile/' + ${friend.id}" class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold hover:bg-slate-200 transition-colors">
                     <span th:text="${#strings.substring(friend.username, 0, 1).toUpperCase()}">F</span>
                 </a>
                 <div>
-                    <a th:href="'/profile/' + ${friend.id}" class="font-bold text-gray-900 hover:text-blue-600 hover:underline" th:text="${friend.name}">Nome</a>
-                    <p class="text-sm text-gray-500" th:text="'@' + ${friend.username}">@user</p>
+                    <a th:href="'/profile/' + ${friend.id}" class="font-bold text-slate-900 hover:underline" th:text="${friend.name}">Nome</a>
+                    <p class="text-sm text-slate-500" th:text="'@' + ${friend.username}">@user</p>
                 </div>
             </div>
         </div>
-        <p th:if="${#lists.isEmpty(friends)}" class="text-center text-gray-500 py-8 bg-white rounded-xl border border-dashed border-gray-300">
-            Esta pessoa ainda não adicionou amigos.
-        </p>
+        <p th:if="${#lists.isEmpty(friends)}" class="text-center text-slate-500 py-10 font-medium">Nenhum amigo adicionado.</p>
     </div>
-
 </main>
 
 <script>
-    function switchTab(tabName) {
-        const postsTab = document.getElementById('tab-posts');
-        const friendsTab = document.getElementById('tab-friends');
-        const btnPosts = document.getElementById('btn-posts');
-        const btnFriends = document.getElementById('btn-friends');
+    function switchTab(t) {
+        document.getElementById('tab-posts').classList.toggle('hidden', t !== 'posts');
+        document.getElementById('tab-friends').classList.toggle('hidden', t !== 'friends');
 
-        if (tabName === 'posts') {
-            postsTab.classList.remove('hidden');
-            friendsTab.classList.add('hidden');
-            btnPosts.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-            btnPosts.classList.remove('text-gray-500');
-            btnFriends.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-            btnFriends.classList.add('text-gray-500');
+        const bp = document.getElementById('btn-posts');
+        const bf = document.getElementById('btn-friends');
+
+        if(t === 'posts') {
+            bp.className = "flex-1 py-4 text-center font-bold text-slate-900 border-b-4 border-blue-500 transition-colors hover:bg-slate-50";
+            bf.className = "flex-1 py-4 text-center font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-50 transition-colors";
         } else {
-            friendsTab.classList.remove('hidden');
-            postsTab.classList.add('hidden');
-            btnFriends.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-            btnFriends.classList.remove('text-gray-500');
-            btnPosts.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-            btnPosts.classList.add('text-gray-500');
+            bf.className = "flex-1 py-4 text-center font-bold text-slate-900 border-b-4 border-blue-500 transition-colors hover:bg-slate-50";
+            bp.className = "flex-1 py-4 text-center font-bold text-slate-500 border-b-4 border-transparent hover:bg-slate-50 transition-colors";
         }
     }
 </script>
