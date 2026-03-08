@@ -70,4 +70,38 @@ public class WebController {
     public String index() {
         return "redirect:/home";
     }
+
+    // Visualizar Perfil de um Usuário
+    @GetMapping("/profile/{id}")
+    public String viewProfile(@PathVariable Long id, Model model, HttpSession session) {
+        User userLogado = (User) session.getAttribute("userLogado");
+        if (userLogado == null) return "redirect:/login";
+
+        User profileUser = userService.findById(id); // Busca o dono do perfil
+
+        // Verifica se é o próprio perfil ou outro perfil
+        boolean isOwnProfile = userLogado.getId().equals(profileUser.getId());
+        boolean isFriend = !isOwnProfile && friendshipService.areFriends(userLogado.getId(), profileUser.getId());
+
+        model.addAttribute("user", userLogado); // Para a Navbar
+        model.addAttribute("profileUser", profileUser); // Dados do Perfil
+        model.addAttribute("isOwnProfile", isOwnProfile);
+        model.addAttribute("isFriend", isFriend);
+
+        // Listas para as abas
+        model.addAttribute("posts", postService.getUserPosts(id));
+        model.addAttribute("friends", friendshipService.getFriendsList(id));
+
+        return "profile";
+    }
+
+    // Rota para Remover Amigo
+    @PostMapping("/friends/remove/{id}")
+    public String removeFriend(@PathVariable Long id, HttpSession session) {
+        User userLogado = (User) session.getAttribute("userLogado");
+        if (userLogado != null) {
+            friendshipService.removeFriend(userLogado.getId(), id);
+        }
+        return "redirect:/profile/" + id; // Volta para o perfil que estava visitando
+    }
 }

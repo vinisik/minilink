@@ -28,4 +28,8 @@ public class UserService {
                 .filter(user -> user.getPassword().equals(password))
                 .orElseThrow(() -> new RuntimeException("Usuário ou senha inválidos"));
     }
+
+    public User findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
 }
