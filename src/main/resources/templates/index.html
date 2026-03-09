@@ -73,7 +73,9 @@
                         </button>
                     </div>
 
-                    <p class="text-slate-800 text-[15px] leading-relaxed mt-1 whitespace-pre-wrap" th:text="${post.content}">Conteúdo</p>
+                    <p class="text-slate-800 text-[15px] leading-relaxed mt-1 whitespace-pre-wrap break-all" th:text="${post.content}">
+                        Conteúdo
+                    </p>
 
                     <div class="mt-4 flex items-center gap-6">
                         <button th:onclick="'curtirPost(' + ${post.id} + ', this)'"
@@ -103,7 +105,9 @@
                                         <a th:href="'/profile/' + ${comment.user.id}" class="font-bold text-slate-900 text-[13px] hover:underline" th:text="${comment.user.name}">Nome</a>
                                         <span class="text-slate-500 text-[12px]" th:text="'@' + ${comment.user.username}">@user</span>
                                     </div>
-                                    <p class="text-slate-700 text-[14px]" th:text="${comment.content}">Comentário</p>
+                                    <p class="text-slate-700 text-[14px] break-all" th:text="${comment.content}">
+                                        Comentário
+                                    </p>
                                 </div>
                             </div>
                         </div>

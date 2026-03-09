@@ -75,7 +75,9 @@
                     </svg>
                 </button>
             </div>
-            <p class="text-slate-800 text-[15px] leading-relaxed" th:text="${post.content}">Conteúdo</p>
+            <p class="text-slate-800 text-[15px] leading-relaxed mt-1 whitespace-pre-wrap break-all" th:text="${post.content}">
+                Conteúdo
+            </p>
         </div>
         <p th:if="${#lists.isEmpty(posts)}" class="text-center text-slate-500 py-10 font-medium">Nenhum post ainda.</p>
     </div>
