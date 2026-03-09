@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     // Verifica se já existe uma curtida desse usuário nesse post específico
-    Optional<PostLike> findByUserAndPost(User user, Post post);
+    Optional<PostLike> findByPostAndUser(Post post, User user);
 
     // Conta quantas curtidas um post tem
     long countByPostId(Long postId);

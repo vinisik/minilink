@@ -57,20 +57,65 @@
                     <span th:text="${#strings.substring(post.user.username, 0, 1).toUpperCase()}">U</span>
                 </a>
                 <div class="flex-1">
-                    <div class="flex items-center gap-1.5">
-                        <a th:href="'/profile/' + ${post.user.id}" class="font-bold text-slate-900 hover:underline" th:text="${post.user.name}">Nome</a>
-                        <span class="text-slate-500 text-sm" th:text="'@' + ${post.user.username}">@user</span>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <a th:href="'/profile/' + ${post.user.id}" class="font-bold text-slate-900 hover:underline" th:text="${post.user.name}">Nome</a>
+                            <span class="text-slate-500 text-sm" th:text="'@' + ${post.user.username}">@user</span>
+                            <span class="text-slate-300 text-sm">•</span>
+                            <span class="text-slate-500 text-sm" th:text="${#temporals.format(post.createdAt, 'dd/MM HH:mm')}">Data</span>
+                        </div>
+
+                        <button th:if="${post.user.id == user.id}" th:onclick="'deletarPost(' + ${post.id} + ')'"
+                                class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50" title="Excluir postagem">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                        </button>
                     </div>
+
                     <p class="text-slate-800 text-[15px] leading-relaxed mt-1 whitespace-pre-wrap" th:text="${post.content}">Conteúdo</p>
 
                     <div class="mt-4 flex items-center gap-6">
                         <button th:onclick="'curtirPost(' + ${post.id} + ', this)'"
                                 class="flex items-center gap-1.5 text-slate-400 hover:text-red-500 transition-colors font-medium text-sm group">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 group-hover:fill-red-500 group-active:scale-90 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 group-hover:fill-red-500 transition-all">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                             </svg>
+                            <span th:text="${#lists.size(post.likes)}">0</span>
                             <span>Curtir</span>
                         </button>
+                        <div class="flex items-center gap-1.5 text-slate-400 font-medium text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                            </svg>
+                            <span th:text="${#lists.size(post.comments)}">0</span> Comentários
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <div class="space-y-3 mb-4">
+                            <div th:each="comment : ${post.comments}" class="flex gap-3 items-start">
+                                <a th:href="'/profile/' + ${comment.user.id}" class="w-8 h-8 shrink-0 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-bold text-xs hover:bg-slate-200 transition-colors">
+                                    <span th:text="${#strings.substring(comment.user.username, 0, 1).toUpperCase()}">U</span>
+                                </a>
+                                <div class="bg-slate-50 p-3 rounded-2xl rounded-tl-none w-full border border-slate-100">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <a th:href="'/profile/' + ${comment.user.id}" class="font-bold text-slate-900 text-[13px] hover:underline" th:text="${comment.user.name}">Nome</a>
+                                        <span class="text-slate-500 text-[12px]" th:text="'@' + ${comment.user.username}">@user</span>
+                                    </div>
+                                    <p class="text-slate-700 text-[14px]" th:text="${comment.content}">Comentário</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 items-center">
+                            <input type="text" th:id="'commentInput-' + ${post.id}" placeholder="Escreva um comentário..."
+                                   class="flex-1 bg-slate-100 border-transparent focus:bg-white border focus:border-blue-500 rounded-full px-4 py-2 text-sm outline-none transition-all">
+                            <button th:onclick="'comentarPost(' + ${post.id} + ')'"
+                                    class="text-blue-600 font-bold text-sm px-3 hover:text-blue-800 transition-colors">
+                                Enviar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,37 +129,57 @@
     async function enviarPost() {
         const content = document.getElementById('postContent').value;
         if (!content.trim()) return;
-
         try {
             const response = await fetch(`/api/posts?userId=${currentUserId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: content
+                method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: content
             });
-
-            if (response.ok) {
-                document.getElementById('postContent').value = "";
-                window.location.reload();
-            } else {
-                alert("Erro! Verifique se seu PostController tem @ResponseBody e retorna o Post.");
-            }
-        } catch (err) {
-            console.error("Erro ao publicar:", err);
-        }
+            if (response.ok) window.location.reload();
+        } catch (err) { console.error("Erro ao publicar:", err); }
     }
 
     async function curtirPost(postId, buttonElement) {
         try {
-            const response = await fetch(`/api/posts/${postId}/like?userId=${currentUserId}`, {
-                method: 'POST'
-            });
+            const response = await fetch(`/api/posts/${postId}/like?userId=${currentUserId}`, { method: 'POST' });
+            if (response.ok) window.location.reload();
+        } catch (error) { console.error("Erro ao curtir:", error); }
+    }
 
+    // Deletar post
+    async function deletarPost(postId) {
+        if(!confirm("Tem certeza que deseja apagar esta postagem?")) return;
+
+        try {
+            const response = await fetch(`/api/posts/${postId}?userId=${currentUserId}`, { method: 'DELETE' });
             if (response.ok) {
                 window.location.reload();
+            } else {
+                alert("Não foi possível excluir a postagem.");
             }
         } catch (error) {
-            console.error("Erro ao curtir:", error);
+            console.error("Erro ao excluir:", error);
         }
+    }
+
+    // Adicionar comentário
+    async function comentarPost(postId) {
+            const input = document.getElementById('commentInput-' + postId);
+            const content = input.value;
+            if (!content.trim()) return;
+
+            try {
+                const response = await fetch(`/api/posts/${postId}/comments?userId=${currentUserId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: content
+                });
+
+                if (response.ok) {
+                    input.value = "";
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error("Erro ao comentar:", error);
+            }
     }
 </script>
 </body>
